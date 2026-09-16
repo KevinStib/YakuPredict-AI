@@ -1,0 +1,4 @@
+YakuPredict AI
+Version: 3.0.0
+Local reproducible commit: 8127b0bbbbf840076ca5ee3af4ae06d8559cd651
+Build date: 2026-09-16
