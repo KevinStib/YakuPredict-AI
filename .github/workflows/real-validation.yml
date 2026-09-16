@@ -1,0 +1,38 @@
+name: real-data-validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "external_validation/**"
+      - "requirements.txt"
+      - ".github/workflows/real-validation.yml"
+  workflow_dispatch:
+
+jobs:
+  njhpp-real-scada:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Validate on real NJHPP hydropower SCADA
+        run: |
+          python external_validation/njhpp_hydropower.py --download
+      - name: Print validation report
+        run: cat reports/njhpp_real_validation.json
+      - name: Upload real-validation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: njhpp-real-validation
+          path: |
+            reports/njhpp_real_validation.json
+            reports/njhpp_real_predictions.csv
+          retention-days: 30
