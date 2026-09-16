@@ -1,0 +1,84 @@
+{
+  "software": "YakuPredict AI",
+  "version": "3.0.0",
+  "target": "future_degradation_risk",
+  "prediction_horizon_steps": 12,
+  "prediction_horizon_minutes": 60,
+  "rows": 19500,
+  "scenario_ids": {
+    "train": [0, 1, 2, 3, 4, 5],
+    "validation": [6, 7],
+    "test": [8, 9],
+    "stress": [10, 11, 12]
+  },
+  "split_rows": {
+    "train": 9000,
+    "validation": 3000,
+    "test": 3000,
+    "stress_shift": 4500
+  },
+  "positive_rates": {
+    "train": 0.058555555555555555,
+    "validation": 0.08833333333333333,
+    "test": 0.05533333333333333,
+    "stress_shift": 0.04755555555555555
+  },
+  "fusion": {
+    "supervised_weight": 0.4,
+    "anomaly_weight": 0.6,
+    "threshold": 0.7,
+    "selection_criterion": "maximización de F1 en escenarios de validación"
+  },
+  "individual_thresholds": {
+    "Random Forest": 0.6,
+    "Isolation Forest": 0.7949999999999999
+  },
+  "validation": {
+    "accuracy": 0.992,
+    "precision": 0.9413919413919414,
+    "recall": 0.969811320754717,
+    "f1": 0.9553903345724907,
+    "roc_auc": 0.9975426856610672,
+    "confusion_matrix": [[2719, 16], [8, 257]],
+    "threshold": 0.7
+  },
+  "test": {
+    "accuracy": 0.9886666666666667,
+    "precision": 0.8793103448275862,
+    "recall": 0.9216867469879518,
+    "f1": 0.9,
+    "roc_auc": 0.9975066107762028,
+    "confusion_matrix": [[2813, 21], [13, 153]],
+    "threshold": 0.7
+  },
+  "stress_shift": {
+    "accuracy": 0.9797777777777777,
+    "precision": 0.7236363636363636,
+    "recall": 0.9299065420560748,
+    "f1": 0.8139059304703476,
+    "roc_auc": 0.9919592587908469,
+    "confusion_matrix": [[4210, 76], [15, 199]],
+    "threshold": 0.7
+  },
+  "feature_importance": {
+    "rolling_vibration_mean_3": 0.2611102954020132,
+    "vibration_mms": 0.2130875150034287,
+    "vibration_thermal_interaction": 0.15226489338963578,
+    "rolling_bearing_temp_mean_3": 0.09372436108150617,
+    "bearing_temp_c": 0.0879439758216224,
+    "oil_temp_c": 0.06892227881246801,
+    "thermal_delta_c": 0.06322980708568308,
+    "hydraulic_pressure_bar": 0.02675087334590088,
+    "power_per_flow": 0.0065138158638319175,
+    "power_mw": 0.0049409186499109565,
+    "flow_m3s": 0.0036936407724615225,
+    "vibration_delta": 0.002920411898058591,
+    "stator_current_a": 0.0029091020762729803,
+    "ambient_temp_c": 0.002664090964783347,
+    "wicket_gate_pct": 0.002202456435339805,
+    "bearing_temp_delta": 0.002148529259260719,
+    "pressure_delta": 0.002023311398428158,
+    "oil_temp_delta": 0.001800753110214996,
+    "power_delta": 0.0011489696291786177
+  }
+}
