@@ -35,4 +35,5 @@ jobs:
           path: |
             reports/njhpp_real_validation.json
             reports/njhpp_real_predictions.csv
+            data/external/njhpp/**
           retention-days: 30
