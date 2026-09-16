@@ -1,37 +1,29 @@
-# YakuPredict AI 3.0.0
+# YakuPredict AI 4.0.0 - Real SCADA Validation
 
-Prototipo académico de **análisis anticipatorio de condición y detección de anomalías** para apoyar el mantenimiento predictivo de unidades hidroeléctricas. La versión 3.0 corrige la validación experimental: la etiqueta ya no se define mediante umbrales de las variables observables, la partición se realiza por **escenarios completos**, los pesos de fusión se calibran en validación y se incorpora una prueba de **cambio de distribución**.
+YakuPredict AI es un prototipo académico para **análisis anticipatorio de condición, detección de anomalías y apoyo al mantenimiento predictivo hidroeléctrico**. El proyecto combina una validación sintética reproducible con una **validación externa sobre datos SCADA industriales reales** de una central hidroeléctrica.
 
-## Alcance
+## Aporte principal
 
-- Random Forest supervisado para estimar riesgo de degradación **en los siguientes 60 minutos** dentro del entorno sintético.
-- Isolation Forest entrenado exclusivamente con condición normal.
-- Fusión ponderada calibrada en escenarios de validación.
-- Comparación RF / Isolation Forest / híbrido en validación, prueba y `stress_shift`.
-- FastAPI, dashboard web, SQLite, historial y documentación OpenAPI.
+- Random Forest supervisado para riesgo anticipatorio en escenarios sintéticos.
+- Isolation Forest para detección de anomalías.
+- Fusión híbrida calibrada únicamente sobre escenarios de validación.
+- FastAPI, dashboard web, SQLite y trazabilidad de inferencias.
 - Pruebas automatizadas.
-- Script de validación externa opcional con **UCI Condition Monitoring of Hydraulic Systems** (DOI 10.24432/C5CW21). El dataset no se redistribuye.
+- Validación externa con datos reales del **Neelum-Jhelum Hydropower Project (Pakistan, 969 MW)**.
 
-> Importante: el prototipo **no demuestra** desempeño predictivo en una central hidroeléctrica real. Los resultados principales pertenecen a escenarios sintéticos controlados; la validación industrial requiere datos SCADA y eventos de mantenimiento confirmados.
+## Dataset real
 
-## Estructura
+Fuente pública: Yasir Saleem Afridi (2022), *Bearing Vibration Dataset of a Hydropower Project*, figshare.  
+DOI: **10.6084/m9.figshare.21290895**  
+Licencia: **CC BY 4.0**.
 
-```text
-YakuPredict_AI/
-├── yakupredict_ai/
-├── data/
-├── models/
-├── reports/
-├── templates/
-├── static/
-├── screenshots/
-├── tests/
-├── scripts/
-├── docs/
-├── external_validation/
-├── requirements.txt
-└── README.md
-```
+La validación v4 usa seis archivos mensuales G1 (junio-noviembre). Se pronostica a un paso la vibración horizontal TGB +X usando 19 características derivadas de variables SCADA reales. La partición es por bloques temporales completos:
+
+- entrenamiento: junio-septiembre;
+- validación: octubre;
+- prueba: noviembre.
+
+En prueba real de noviembre, Extra Trees obtuvo RMSE ≈ **0.7332**, frente a **0.8213** del predictor de persistencia, una mejora relativa de aproximadamente **10.73 %**. En octubre, en cambio, la persistencia fue claramente superior, evidenciando **no estacionariedad / cambio de régimen**. Por ello el trabajo no afirma superioridad universal ni una tasa de predicción de fallos por timestamp.
 
 ## Reproducción
 
@@ -43,33 +35,49 @@ python -m venv .venv
 # source .venv/bin/activate
 
 pip install -r requirements.txt
+
+# Pipeline sintético
 python -m yakupredict_ai.data_generator
 python -m yakupredict_ai.train
 pytest -q
+
+# Descargar datos públicos NJHPP
+python external_validation/njhpp_hydropower.py --download
+
+# Validación real NJHPP
+python external_validation/njhpp_hydropower_v4.py \
+  --data-dir data/external/njhpp
+
+# Aplicación
 uvicorn yakupredict_ai.api:app --reload
 ```
 
 Dashboard: `http://127.0.0.1:8000/`  
-OpenAPI: `http://127.0.0.1:8000/docs`  
-Métricas: `http://127.0.0.1:8000/metrics`
+OpenAPI: `http://127.0.0.1:8000/docs`
 
-## Validación externa pública opcional
+## Estructura
 
-Descargue el dataset UCI 447 desde su fuente oficial y extraiga los TXT. Después:
-
-```bash
-python external_validation/uci_hydraulic.py --data-dir /ruta/a/Sensors_Target
+```text
+YakuPredict_AI_TFE_v4_RealSCADA/
+├── yakupredict_ai/               # IA, API, persistencia y servicios
+├── external_validation/          # validación UCI y NJHPP real
+├── data/
+│   ├── yakupredict_synthetic_scenarios.csv
+│   └── external/njhpp/           # descarga reproducible CC BY 4.0
+├── models/                       # bundles serializados
+├── reports/                      # métricas y predicciones
+├── templates/                    # dashboard HTML
+├── static/                       # CSS/JS
+├── screenshots/
+├── tests/
+├── scripts/
+└── docs/
 ```
 
-La tarea externa clasifica válvula no óptima frente a óptima usando resúmenes estadísticos de sensores. Sirve para estudiar portabilidad del pipeline sobre datos físicos independientes, **no** para afirmar validez hidroeléctrica.
+## Alcance científico
 
-## Versionado reproducible
+La evidencia sintética valida el pipeline completo bajo condiciones controladas. La evidencia real valida **portabilidad a datos SCADA hidroeléctricos reales, pronóstico temporal de vibración y detección de anomalías**. El conjunto público no aporta una etiqueta confirmada de fallo para cada instante, por lo que no se reporta una exactitud de clasificación de fallos industriales por timestamp.
 
-Versión de software: **3.0.0**.  
-El ZIP entregado con el TFE constituye el snapshot evaluado. Se incluye `reports/training_report_v3.json` y `reports/model_comparison_v3.csv` para verificar los números usados en la memoria.
+## Autor
 
-## Publicación en GitHub
-
-Repositorio académico asociado al TFE de Kevin Stib Cardenas Rosales.
-
-La carpeta `.github/workflows/` ejecuta `pytest` automáticamente en cada `push` y `pull_request`.
+Kevin Stib Cardenas Rosales - Trabajo Fin de Estudios, Máster Universitario en Inteligencia Artificial, UNIR, 2026.

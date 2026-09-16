@@ -1,4 +1,4 @@
 YakuPredict AI
-Version: 4.0.0
+Version: 4.0.0-real-scada
 Build date: 2026-09-16
-Release focus: external validation with real hydropower SCADA data
+External validation: Neelum-Jhelum Hydropower Project (figshare DOI 10.6084/m9.figshare.21290895)
