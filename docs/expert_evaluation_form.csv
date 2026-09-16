@@ -1,0 +1,8 @@
+dimension,item,scale_min,scale_max,criterion
+Claridad,"El índice de riesgo y el horizonte de 60 min se interpretan sin ambigüedad",1,5,>=4
+Utilidad,"La información apoyaría la priorización de una inspección",1,5,>=4
+Relevancia,"Las variables y salidas son pertinentes para mantenimiento hidroeléctrico",1,5,>=4
+Trazabilidad,"El historial facilita revisar decisiones y condiciones previas",1,5,>=4
+Navegación,"El dashboard resulta sencillo y consistente",1,5,>=4
+Confianza,"La interfaz deja claro que la IA no sustituye protecciones ni diagnóstico humano",1,5,>=4
+Aplicabilidad,"La arquitectura es viable como base de un futuro piloto con SCADA/historiador",1,5,>=4
