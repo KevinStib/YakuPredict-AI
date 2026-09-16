@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ software_name }}</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">Y</div>
+      <div><strong>YakuPredict AI</strong><span>Hydropower Asset Intelligence</span></div>
+    </div>
+    <nav>
+      <a class="nav-item active" href="#overview">Panel de condición</a>
+      <a class="nav-item" href="#assessment">Evaluación</a>
+      <a class="nav-item" href="#history-panel">Historial</a>
+      <a class="nav-item" href="/docs" target="_blank">API REST ↗</a>
+    </nav>
+    <div class="side-note">
+      <span class="dot"></span> Modelo disponible
+      <small>Versión {{ version }}</small>
+    </div>
+  </aside>
+
+  <main class="workspace">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">CENTRAL HIDROELÉCTRICA · ANÁLISIS ANTICIPATORIO DE CONDICIÓN</p>
+        <h1>Condición de unidad generadora</h1>
+      </div>
+      <div class="status-pill"><span class="pulse"></span>Sistema operativo</div>
+    </header>
+
+    <section id="overview" class="kpi-grid">
+      <article class="kpi main-kpi">
+        <span>Índice de riesgo</span>
+        <strong id="risk-score">--</strong>
+        <div class="risk-track"><div id="risk-bar" class="risk-fill"></div></div>
+        <small>Fusión calibrada RF + Isolation Forest · horizonte sintético 60 min</small>
+      </article>
+      <article class="kpi">
+        <span>Nivel</span>
+        <strong id="risk-level" class="level-badge neutral">SIN EVALUAR</strong>
+        <small id="decision-caption">Ejecute una evaluación</small>
+      </article>
+      <article class="kpi">
+        <span>Prob. supervisada</span>
+        <strong id="supervised-score">--</strong>
+        <small>Random Forest</small>
+      </article>
+      <article class="kpi">
+        <span>Anomalía</span>
+        <strong id="anomaly-score">--</strong>
+        <small>Isolation Forest</small>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article id="assessment" class="panel form-panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">ENTRADA DE PROCESO</p><h2>Evaluar condición</h2></div>
+          <div class="preset-wrap">
+            <button class="preset" type="button" data-preset="normal">Normal</button>
+            <button class="preset" type="button" data-preset="watch">Seguimiento</button>
+            <button class="preset critical" type="button" data-preset="critical">Crítico</button>
+          </div>
+        </div>
+        <form id="prediction-form">
+          <div class="fields">
+            <label><span>Caudal</span><div><input name="flow_m3s" type="number" step="0.01" value="78" required><b>m³/s</b></div></label>
+            <label><span>Potencia</span><div><input name="power_mw" type="number" step="0.01" value="72" required><b>MW</b></div></label>
+            <label><span>Vibración</span><div><input name="vibration_mms" type="number" step="0.01" value="2.2" required><b>mm/s</b></div></label>
+            <label><span>T. cojinete</span><div><input name="bearing_temp_c" type="number" step="0.01" value="66" required><b>°C</b></div></label>
+            <label><span>T. aceite</span><div><input name="oil_temp_c" type="number" step="0.01" value="52" required><b>°C</b></div></label>
+            <label><span>Presión hidráulica</span><div><input name="hydraulic_pressure_bar" type="number" step="0.01" value="74" required><b>bar</b></div></label>
+            <label><span>Apertura distribuidor</span><div><input name="wicket_gate_pct" type="number" step="0.01" value="75" required><b>%</b></div></label>
+            <label><span>Corriente estator</span><div><input name="stator_current_a" type="number" step="0.01" value="1360" required><b>A</b></div></label>
+            <label><span>T. ambiente</span><div><input name="ambient_temp_c" type="number" step="0.01" value="22" required><b>°C</b></div></label>
+          </div>
+          <button id="submit-btn" class="primary" type="submit">Analizar condición</button>
+        </form>
+      </article>
+
+      <article class="panel recommendation-panel">
+        <div class="panel-heading"><div><p class="eyebrow">SOPORTE A DECISIONES</p><h2>Diagnóstico orientativo</h2></div></div>
+        <div id="recommendation-state" class="empty-state">
+          <div class="shield">✓</div>
+          <p>Ingrese las variables de condición y ejecute el análisis para obtener un índice híbrido de riesgo.</p>
+        </div>
+        <div id="recommendation-result" class="recommendation-result hidden">
+          <div class="decision-head"><span id="decision-icon">!</span><div><small>Clasificación</small><strong id="decision-level">--</strong></div></div>
+          <p id="recommendation-text"></p>
+          <div class="model-breakdown">
+            <div><span>Random Forest</span><b id="rf-breakdown">--</b></div>
+            <div><span>Isolation Forest</span><b id="if-breakdown">--</b></div>
+            <div><span>Umbral de modelo</span><b>70 %*</b></div>
+          </div>
+          <small class="footnote">* Umbral y pesos calibrados en escenarios sintéticos de validación; no corresponden a límites de protección industrial.</small>
+        </div>
+      </article>
+    </section>
+
+    <section id="history-panel" class="panel history-panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">TRAZABILIDAD</p><h2>Evaluaciones recientes</h2></div>
+        <button class="ghost" id="refresh-history" type="button">Actualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Fecha UTC</th><th>Riesgo</th><th>Nivel</th><th>RF</th><th>Anomalía</th></tr></thead>
+          <tbody id="history-body"><tr><td colspan="6" class="table-empty">Sin registros</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <span>YakuPredict AI · Prototipo académico de apoyo al mantenimiento predictivo</span>
+      <span>No sustituye protecciones, diagnóstico de ingeniería ni procedimientos de planta.</span>
+    </footer>
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
