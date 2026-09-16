@@ -13,9 +13,9 @@ SCREENSHOT_DIR = ROOT / "screenshots"
 DOCS_DIR = ROOT / "docs"
 
 DATASET_PATH = DATA_DIR / "yakupredict_synthetic_scenarios.csv"
-MODEL_PATH = MODEL_DIR / "yakupredict_bundle_v3.joblib"
-METRICS_PATH = REPORT_DIR / "training_report_v3.json"
-COMPARISON_PATH = REPORT_DIR / "model_comparison_v3.csv"
+MODEL_PATH = MODEL_DIR / "yakupredict_bundle_v4.joblib"
+METRICS_PATH = REPORT_DIR / "training_report_v4.json"
+COMPARISON_PATH = REPORT_DIR / "model_comparison_v4.csv"
 DB_PATH = ROOT / "yakupredict_predictions.sqlite3"
 
 RAW_FEATURES = [

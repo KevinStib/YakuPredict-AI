@@ -1,9 +1,14 @@
-# Artefactos generados
+# Artifacts
 
-Los artefactos binarios y el dataset completo se generan de forma reproducible y no son necesarios para revisar el código fuente.
+## Synthetic
+- `models/yakupredict_bundle_v4.joblib`
+- `reports/training_report_v4.json`
+- `reports/model_comparison_v4.csv`
 
-- `data/yakupredict_synthetic_scenarios.csv`: `python -m yakupredict_ai.data_generator`
-- `models/yakupredict_bundle_v3.joblib`: `python -m yakupredict_ai.train`
-- `screenshots/*.png`: `python scripts/capture_screenshots.py` después de iniciar la API.
+## Real SCADA external validation
+- `reports/njhpp_real_validation_v4.json`
+- `reports/njhpp_real_predictions_v4.csv`
+- `reports/njhpp_real_metrics_v4.csv`
+- `reports/figures_real/*.png`
 
-Los resultados numéricos originales se conservan en `reports/`. El snapshot local entregado con el TFE incluye además el dataset generado, el bundle serializado y las capturas del dashboard.
+Real data source: Afridi (2022), figshare DOI 10.6084/m9.figshare.21290895, CC BY 4.0.
