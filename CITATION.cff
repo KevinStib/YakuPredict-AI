@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use YakuPredict AI in academic work, please cite this software and the associated TFE."
+title: "YakuPredict AI"
+version: "3.0.0"
+type: software
+authors:
+  - family-names: "Cardenas Rosales"
+    given-names: "Kevin Stib"
+date-released: "2026-09-16"
+repository-code: "https://github.com/KevinStib/YakuPredict-AI"
+abstract: "Academic prototype for anticipatory condition analysis and anomaly detection to support predictive maintenance in hydroelectric units."
+keywords:
+  - predictive maintenance
+  - hydroelectric power
+  - machine learning
+  - anomaly detection
+  - random forest
+  - isolation forest
+license: ""
